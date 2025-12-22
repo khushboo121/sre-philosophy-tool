@@ -1,6 +1,6 @@
 # Security Scanning Tools and Workflows
 
-This document provides a comprehensive overview of the security scanning tools and workflows used in the Tanzu Platform ecosystem. It differentiates between various security tools, their purposes, and how they integrate into the CI/CD pipeline.
+This document provides a comprehensive overview of the security scanning tools and workflows used in the <division> Platform ecosystem. It differentiates between various security tools, their purposes, and how they integrate into the CI/CD pipeline.
 
 ## Table of Contents
 
@@ -9,14 +9,14 @@ This document provides a comprehensive overview of the security scanning tools a
 - [Tool Comparison Matrix](#tool-comparison-matrix)
 - [Coverity - Static Application Security Testing (SAST)](#coverity---static-application-security-testing-sast)
 - [Black Duck - Software Composition Analysis (SCA)](#black-duck---software-composition-analysis-sca)
-- [TVS - Tanzu Vulnerability Service](#tvs---tanzu-vulnerability-service)
+- [TVS - <division> Vulnerability Service](#tvs---<division>-vulnerability-service)
 - [Integration with CI/CD](#integration-with-cicd)
 - [Best Practices](#best-practices)
 - [References](#references)
 
 ## Overview
 
-The security-scans repository contains GitHub workflows and automation scripts for performing comprehensive security scanning across Tanzu Platform services. The repository implements a multi-layered security approach using different tools to address various aspects of application security:
+The security-scans repository contains GitHub workflows and automation scripts for performing comprehensive security scanning across <division> Platform services. The repository implements a multi-layered security approach using different tools to address various aspects of application security:
 
 1. **Static Analysis** - Analyzing source code for vulnerabilities
 2. **Dependency Scanning** - Identifying vulnerable open-source components
@@ -78,21 +78,21 @@ Coverity is a Static Application Security Testing (SAST) tool that analyzes sour
 - **Automatic Stream Creation**: Creates Coverity streams automatically if they don't exist
 - **Custom Configuration**: Supports `coverity.yaml` for repository-specific settings
 - **Parallel Scanning**: Scans up to 15 services simultaneously
-- **Daily Scheduled Scans**: Automated daily scans at 8 AM UTC (TanzuHub) and 10 AM UTC (TPCF)
+- **Daily Scheduled Scans**: Automated daily scans at 8 AM UTC (<division>Hub) and 10 AM UTC (TPCF)
 
 ### Workflow Architecture
 
 ```
-trigger-tanzuhub-coverity-scan.yml (TanzuHub Services)
+trigger-<division>hub-coverity-scan.yml (<division>Hub Services)
          │
-         ├───> tanzu-common-coverity-workflow.yml (Reusable)
+         ├───> <division>-common-coverity-workflow.yml (Reusable)
          │
 trigger-tpcf-coverity-scan.yml (TPCF Services)
 ```
 
 ### Coverage
 
-- **TanzuHub Services**: 36 services (19 autocapture, 1 JavaScript, 16 Golang)
+- **<division>Hub Services**: 36 services (19 autocapture, 1 JavaScript, 16 Golang)
 - **TPCF Services**: 33 active services (24 autocapture, 9 Golang)
 - **Total**: 69 services scanned daily
 
@@ -158,17 +158,17 @@ Black Duck is a Software Composition Analysis (SCA) tool that:
 
 ### Scripts and Automation
 
-#### 1. BlackDuck-Scan-Tanzu-CLI-Plugin.py
-**Purpose**: Triggers Black Duck scans for Tanzu CLI plugins via Jenkins
+#### 1. BlackDuck-Scan-<division>-CLI-Plugin.py
+**Purpose**: Triggers Black Duck scans for <division> CLI plugins via Jenkins
 
 **Functionality**:
 - Reads Docker image paths from JSON configuration
-- Triggers Jenkins job `tnz-blackduck-scan-job` for each plugin
+- Triggers Jenkins job `<DIV>-blackduck-scan-job` for each plugin
 - Configures scan parameters (project name, version, phase, scan type)
 
 **Usage**:
 ```bash
-python BlackDuck-Scan-Tanzu-CLI-Plugin.py
+python BlackDuck-Scan-<division>-CLI-Plugin.py
 ```
 
 #### 2. BlackDuck_Gen_NoticeFile.py
@@ -198,19 +198,19 @@ python BlackDuck_Gen_NoticeFile.py
 
 **Usage**:
 ```bash
-export BD_PROD_URL="https://broadcom.app.blackduck.com"
+export BD_PROD_URL="https://<company>.app.blackduck.com"
 export BD_API_TOKEN="your-token"
 python BlackDuck_Update_Phase.py \
   --phase "RELEASED" \
-  --prefix "TNZ-*" \
+  --prefix "<DIV>-*" \
   --versionName "release-head"
 ```
 
-#### 4. BlackDuck_Gen_Tanzu_CLI_Path.py
-**Purpose**: Generates Tanzu CLI paths for Black Duck scanning
+#### 4. BlackDuck_Gen_<division>_CLI_Path.py
+**Purpose**: Generates <division> CLI paths for Black Duck scanning
 
 **Functionality**:
-- Creates configuration files for Tanzu CLI plugin scanning
+- Creates configuration files for <division> CLI plugin scanning
 - Maps service names to Docker image paths
 
 #### 5. notices-report-generator_concurrentProcEnabled.py
@@ -225,7 +225,7 @@ python BlackDuck_Update_Phase.py \
 **Usage**:
 ```bash
 python notices-report-generator_concurrentProcEnabled.py \
-  --bdurl https://broadcom.app.blackduck.com \
+  --bdurl https://<company>.app.blackduck.com \
   --apitoken "<apitoken>" \
   -p "<Projname>" \
   -v <projversion> \
@@ -244,16 +244,16 @@ python notices-report-generator_concurrentProcEnabled.py \
 
 ### Integration Points
 
-- **Jenkins**: Automated scans via `tnz-blackduck-scan-job`
+- **Jenkins**: Automated scans via `<DIV>-blackduck-scan-job`
 - **GitHub Actions**: Workflow-based scanning (see `generate_trigger.py`)
 - **Docker Registry**: Direct image scanning from JFrog/Artifactory
 - **CI/CD Pipelines**: Integrated into build and release processes
 
-## TVS - Tanzu Vulnerability Service
+## TVS - <division> Vulnerability Service
 
 ### Purpose
 
-TVS (Tanzu Vulnerability Service) is a centralized vulnerability management platform that:
+TVS (<division> Vulnerability Service) is a centralized vulnerability management platform that:
 - **Aggregates Findings**: Collects vulnerability data from multiple sources
 - **Tracks Builds**: Associates vulnerabilities with specific build versions
 - **Manages Lifecycle**: Tracks vulnerability status through remediation lifecycle
@@ -325,8 +325,8 @@ BUILD_DETAILS=$(get_build "$BUILD_ID")
 export TVS_ENVIRONMENT="production"  # or "staging"
 
 # API URLs are automatically set:
-# Production: https://tpe-tvs.acc.broadcom.net
-# Staging: https://tpe-tvs-staging.acc.broadcom.net
+# Production: https://<product>-tvs.acc.<company>.net
+# Staging: https://<product>-tvs-staging.acc.<company>.net
 ```
 
 ### Use Cases
@@ -346,7 +346,7 @@ export TVS_ENVIRONMENT="production"  # or "staging"
 ```yaml
 # GitHub Actions workflow
 - name: Coverity Scan
-  uses: TNZ/tpe-coverity-scan/scan@v2
+  uses: <DIV>/<product>-coverity-scan/scan@v2
   with:
     action: "scan"
     service: "my-service"
@@ -361,7 +361,7 @@ export TVS_ENVIRONMENT="production"  # or "staging"
 # Jenkins job trigger
 - name: Trigger Black Duck Scan
   run: |
-    python scripts/BlackDuck-Scan-Tanzu-CLI-Plugin.py
+    python scripts/BlackDuck-Scan-<division>-CLI-Plugin.py
 ```
 
 #### TVS Integration
@@ -378,7 +378,7 @@ export TVS_ENVIRONMENT="production"  # or "staging"
 
 | Tool | Frequency | Trigger |
 |------|-----------|---------|
-| **Coverity** | Daily | Scheduled (8 AM UTC TanzuHub, 10 AM UTC TPCF) |
+| **Coverity** | Daily | Scheduled (8 AM UTC <division>Hub, 10 AM UTC TPCF) |
 | **Black Duck** | On-demand | Manual trigger, release builds |
 | **TVS** | Continuous | After each scan completion |
 
@@ -490,7 +490,7 @@ export TVS_ENVIRONMENT="production"  # or "staging"
 
 - [Coverity Scan Workflows Documentation](./coverity-readme.md) - Comprehensive Coverity documentation
 - [Black Duck Documentation](https://www.synopsys.com/software-integrity/software-security-tools/black-duck-sourcery.html) - Official Black Duck documentation
-- [TVS CLI Documentation](https://tpe-tvs.acc.broadcom.net/docs) - TVS API and CLI documentation
+- [TVS CLI Documentation](https://<product>-tvs.acc.<company>.net/docs) - TVS API and CLI documentation
 
 ### Repository Structure
 
@@ -499,9 +499,9 @@ security-scans/
 ├── README.md                          # Main repository README
 ├── coverity-readme.md                 # Coverity detailed documentation
 ├── scripts/
-│   ├── BlackDuck-Scan-Tanzu-CLI-Plugin.py
+│   ├── BlackDuck-Scan-<division>-CLI-Plugin.py
 │   ├── BlackDuck_Gen_NoticeFile.py
-│   ├── BlackDuck_Gen_Tanzu_CLI_Path.py
+│   ├── BlackDuck_Gen_<division>_CLI_Path.py
 │   ├── BlackDuck_Update_Phase.py
 │   ├── generate_trigger.py
 │   ├── notices-report-generator_concurrentProcEnabled.py
@@ -511,19 +511,19 @@ security-scans/
 │       └── pull_image_from_jfrog.py
 └── .github/
     └── workflows/
-        ├── trigger-tanzuhub-coverity-scan.yml
+        ├── trigger-<division>hub-coverity-scan.yml
         ├── trigger-tpcf-coverity-scan.yml
-        ├── tanzu-common-coverity-workflow.yml
+        ├── <division>-common-coverity-workflow.yml
         └── [Black Duck workflows]
 ```
 
 ### Key URLs
 
-- **Coverity Connect**: https://cov-vmw-tnz.devops.broadcom.net:8443/
-- **Black Duck**: https://broadcom.app.blackduck.com
-- **TVS Production**: https://tpe-tvs.acc.broadcom.net
-- **TVS Staging**: https://tpe-tvs-staging.acc.broadcom.net
-- **GitHub Repository**: https://github.gwd.broadcom.net/TNZ/security-scans
+- **Coverity Connect**: https://cov-vmw-<DIV>.devops.<company>.net:8443/
+- **Black Duck**: https://<company>.app.blackduck.com
+- **TVS Production**: https://<product>-tvs.acc.<company>.net
+- **TVS Staging**: https://<product>-tvs-staging.acc.<company>.net
+- **GitHub Repository**: https://github.gwd.<company>.net/<DIV>/security-scans
 
 ## Summary
 
@@ -544,6 +544,6 @@ By using these tools in combination, organizations can achieve a robust security
 ---
 
 **Last Updated**: December 2024  
-**Maintainer**: TNZ DevOps Team  
-**Repository**: [security-scans](https://github.gwd.broadcom.net/TNZ/security-scans)
+**Maintainer**: <DIV> DevOps Team  
+**Repository**: [security-scans](https://github.gwd.<company>.net//security-scans)
 
