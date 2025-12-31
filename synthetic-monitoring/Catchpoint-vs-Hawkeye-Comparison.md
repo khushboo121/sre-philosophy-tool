@@ -1,11 +1,7 @@
 # Catchpoint vs Hawkeye: Synthetic Monitoring Comparison
 
 **Document Created:** January 2025  
-**Sources:**
-- Catchpoint: https://vmw-confluence.broadcom.net/spaces/SYM/pages/318374474/Catchpoint
-- Hawkeye: https://vmw-confluence.broadcom.net/spaces/SYM/pages/310881591/Hawkeye
 
----
 
 ## Executive Summary
 
@@ -517,8 +513,8 @@
 
 ## 15. References
 
-- Catchpoint Confluence Page: https://vmw-confluence.broadcom.net/spaces/SYM/pages/318374474/Catchpoint
-- Hawkeye Confluence Page: https://vmw-confluence.broadcom.net/spaces/SYM/pages/310881591/Hawkeye
+- Catchpoint Confluence Page: SYM/pages/318374474/Catchpoint
+- Hawkeye Confluence Page: SYM/pages/310881591/Hawkeye
 - Catchpoint Official Website: https://www.catchpoint.com
 - Hawkeye Product Information: https://www.keysight.com (Ixia/Keysight)
 
